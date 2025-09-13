@@ -1,0 +1,90 @@
+##window fun
+
+create database window_fun;
+use window_fun;
+
+create table employee(
+emp_id int,
+emp_name varchar(50),
+department varchar(50),
+salary int
+);
+
+insert into employee (emp_id,emp_name,department,salary) values
+(1,'Amit','HR',40000),
+(2,'Priya','HR',45000),
+(3,'Rahul','IT',50000),
+(4,'Sneha','IT',60000),
+(5,'Rohan','IT',55000),
+(6,'Neha','Sales',30000),
+(7,'Vikas','Sales',35000),
+(8,'Vishal','IT',35000),
+(9,'Amar','Sales',55000);
+
+
+## Aggregation fun
+select * from employee;
+
+
+#sum()
+
+select emp_id,emp_name,department,salary,
+sum(salary) over (partition by department order by department) as sum_formula,
+avg(salary) over (partition by department order by department) as avg_formula,
+max(salary) over (partition by department order by department) as max_formula,
+min(salary) over (partition by department order by department) as min_formula,
+count(salary) over (partition by department order by department) as count_formula
+from employee;
+
+
+##Ranking fun
+
+## row_number()
+
+select emp_id,emp_name,department,salary,
+row_number() over (order by salary) as row_num
+from employee;
+
+##rank()
+
+select emp_id,emp_name,department,salary,
+rank() over (order by salary) as rank_fun
+from employee;
+
+##Dense_rank()
+
+select emp_id,emp_name,department,salary,
+dense_rank() over (order by salary) as d_rank
+from employee;
+
+##ntile fun
+
+select emp_id,emp_name,department,salary,
+ntile(3) over (order by salary) as ntile_parts
+from employee;
+
+## value fun
+
+#lead()
+
+select emp_id,emp_name,department,salary,
+lead(salary) over (order by salary) as lead_fun
+from employee;
+
+#lag()
+
+select emp_id,emp_name,department,salary,
+lag(salary) over (order by salary) as lag_fun
+from employee;
+
+#first_value()
+
+select department,salary,
+first_value(salary) over (order by salary) as 1st_value
+from employee;
+
+#last_value()
+
+select department,salary,
+last_value(salary) over (order by salary range between unbounded preceding and unbounded following) as lst_value
+from employee;
